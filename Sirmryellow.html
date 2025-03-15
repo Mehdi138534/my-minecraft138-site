@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Tahoma', sans-serif;
+            background-color: #1a1a1a;
+            color: white;
+            text-align: center;
+            transition: background-color 0.5s, color 0.5s;
+        }
+        .light-theme {
+            background-color: #f4f4f4;
+            color: black;
+        }
+        header {
+            background-color: #222;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(255, 204, 0, 0.8);
+            animation: fadeIn 1s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+        nav ul li {
+            display: inline;
+            margin: 0 20px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            transition: color 0.3s, transform 0.3s;
+        }
+        nav ul li a:hover {
+            color: #ffcc00;
+            transform: scale(1.1);
+        }
+        .gallery-container img {
+            width: 250px;
+            margin: 10px;
+            transition: transform 0.3s ease-in-out;
+            border-radius: 10px;
+        }
+        .gallery-container img:hover {
+            transform: scale(1.15) rotate(3deg);
+        }
+        .gallery-container {
+            animation: fadeInGallery 1s ease-in-out;
+        }
+        @keyframes fadeInGallery {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .comment-form {
+            animation: fadeInComment 1s ease-in-out;
+        }
+        @keyframes fadeInComment {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .login-form, .register-form {
+            margin: 30px auto;
+            width: 30%;
+            padding: 20px;
+            background: #333;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 204, 0, 0.7);
+        }
+        .login-form input, .register-form input {
+            width: 90%;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .theme-toggle {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: #ffcc00;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0px 0px 10px rgba(255, 204, 0, 0.6);
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .theme-toggle:hover {
+            background: #ffaa00;
+            transform: scale(1.1);
+        }
+        .account-toggle {
+            position: fixed;
+            top: 50px;
+            left: 10px;
+            background: #ffcc00;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0px 0px 10px rgba(255, 204, 0, 0.6);
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .account-toggle:hover {
+            background: #ffaa00;
+            transform: scale(1.1);
+        }
+        footer {
+            background-color: #222;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+        .content-section {
+            margin: 30px 0;
+        }
+        .content-section h3 {
+            color: #ffcc00;
+        }
+        .account-info {
+            padding: 15px;
+            background-color: #333;
+            margin-top: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+        .settings-section {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #444;
+            border-radius: 5px;
+        }
+        .settings-section label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .settings-section input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+        .settings-section button {
+            padding: 10px 20px;
+            background-color: #ffcc00;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .settings-section button:hover {
+            background-color: #ffaa00;
+        }
+        .logout-button {
+            padding: 10px 20px;
+            background-color: #ff3333;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        .logout-button:hover {
+            background-color: #ff1a1a;
+        }
+    </style>
+</head>
+<body>
+    <div class="theme-toggle" onclick="toggleTheme()">تغییر تم</div>
+    <div class="account-toggle" onclick="toggleAccountInfo()">حساب کاربری</div>
+    <div id="account-info" class="account-info">
+        <h3>حساب کاربری</h3>
+        <p>نام کاربری: <span id="account-username">نام کاربری</span></p>
+        <p>برای خروج از حساب کاربری، می‌توانید وارد بخش تنظیمات شوید.</p>
+
+        <div class="settings-section">
+            <h4>تنظیمات حساب کاربری</h4>
+            <label for="change-username">نام کاربری جدید:</label>
+            <input type="text" id="change-username" placeholder="نام کاربری جدید">
+            
+            <label for="change-password">رمز عبور جدید:</label>
+            <input type="password" id="change-password" placeholder="رمز عبور جدید">
+            
+            <button onclick="changeSettings()">ذخیره تغییرات</button>
+        </div>
+
+        <button class="logout-button" onclick="logout()">خروج از حساب کاربری</button>
+    </div>
+    <header>
+		<h1>ماینکرفت پوجاو لانچر</h1>
+      <nav id="nav-menu" class="hidden">
+            <ul>
+                <li><a href="#">خانه</a></li>
+                <li><a href="#blog">مقالات</a></li>
+                <li><a href="#gallery">گالری</a></li>
+                <li><a href="#comments">نظرات</a></li>
+                <li><a href="#contact">تماس با ما</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <div id="auth-section">
+        <div id="login-form" class="login-form">
+			<h2>سلام به سایت خودتون خوش آمدید</h2>
+            <input type="text" id="login-username" placeholder="نام کاربری">
+            <input type="password" id="login-password" placeholder="رمز عبور">
+            <button onclick="login()">ورود</button>
+            <p id="login-error" style="color: red;"></p>
+            <p>اگر حساب کاربری ندارید، <a href="javascript:void(0)" onclick="showRegisterForm()">اینجا ثبت‌نام کنید</a>.</p>
+        </div>
+
+        <div id="register-form" class="register-form hidden">
+            <h2>ثبت‌نام</h2>
+            <input type="text" id="register-username" placeholder="نام کاربری">
+            <input type="password" id="register-password" placeholder="رمز عبور">
+            <button onclick="register()">ثبت‌نام</button>
+            <p id="register-error" style="color: red;"></p>
+            <p>اگر حساب کاربری دارید، <a href="javascript:void(0)" onclick="showLoginForm()">اینجا وارد شوید</a>.</p>
+        </div>
+    </div>
+
+    <section id="blog">
+        <h2>آخرین مقالات</h2>
+        <div class="content-section">
+            <h3>ترفندهای ماینکرافت</h3>
+            <p>در این مقاله چند ترفند جالب برای بهبود بازی شما معرفی می‌کنیم...</p>
+            <a href="javascript:void(0)" onclick="showPost('post1')">ادامه مطلب</a>
+            <div id="post1" class="post-content hidden">
+                <h4>ترفندهای ماینکرافت - ادامه مطلب</h4>
+                <p>در این مقاله شما با تکنیک‌های جالب و کارآمد ماینکرافت آشنا می‌شوید که می‌تواند تجربه بازی شما را به کلی تغییر دهد...</p>
+                <a href="javascript:void(0)" onclick="hidePost('post1')">بستن</a>
+            </div>
+        </div>
+        
+        <div class="content-section">
+            <h3>بهترین مادهای ماینکرافت</h3>
+            <p>معرفی بهترین مادهای بازی که تجربه شما را هیجان‌انگیزتر می‌کنند...</p>
+            <a href="javascript:void(0)" onclick="showPost('post2')">ادامه مطلب</a>
+            <div id="post2" class="post-content hidden">
+                <h4>بهترین مادهای ماینکرافت - ادامه مطلب</h4>
+                <p>در این مقاله، بهترین مادهای ماینکرافت معرفی شده است که می‌تواند به شما امکان‌های جدیدی برای کاوش در دنیای بازی بدهد...</p>
+                <a href="javascript:void(0)" onclick="hidePost('post2')">بستن</a>
+            </div>
+        </div>
+    </section>
+    
+    <section id="gallery">
+        <h2>گالری تصاویر</h2>
+        <div class="gallery-container">
+            <img src="../Pictures/2025-01-24_14.41.25.png" alt="Minecraft Screenshot">
+            <img src="../Pictures/_8ddc0644-69bb-4091-be1c-1a60fc67ff8f.jfif" alt="Minecraft Screenshot">
+            <img src="../Pictures/2025-01-24_14.40.58.png" alt="Minecraft Screenshot">
+        </div>
+    </section>
+
+    <section id="comments">
+        <h2>نظرات کاربران</h2>
+        <p>کاربران درباره سایت و مقالات چه نظری دارند؟</p>
+        <div class="comment-form">
+            <input type="text" id="comment-username" placeholder="نام خود را وارد کنید">
+            <textarea id="comment-text" placeholder="نظر خود را بنویسید"></textarea>
+            <button onclick="submitComment()">ارسال نظر</button>
+        </div>
+        <div id="comments-list">
+            <p>محمد: سایت عالیه! اطلاعات خوبی داره. 👍</p>
+            <p>علی: بخش مقالات خیلی کاربردیه. لطفاً بیشتر بنویسید. 😃</p>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2>تماس با ما</h2>
+		<p>برای ارتباط با ما از ایمیل fggg04251@gmail.com استفاده کنید.</p>
+    </section>
+
+    <footer>
+        <p>تمامی حقوق محفوظ است &copy; 2025</p>
+    </footer>
+
+    <script>
+        // بارگذاری تم از localStorage
+        if(localStorage.getItem('theme') === 'light') {
+            document.body.classList.add('light-theme');
+        }
+
+        // تغییر تم
+        function toggleTheme() {
+            document.body.classList.toggle("light-theme");
+            if(document.body.classList.contains("light-theme")) {
+                localStorage.setItem('theme', 'light');
+            } else {
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // نمایش فرم ورود
+        function showLoginForm() {
+            document.getElementById('login-form').style.display = 'block';
+            document.getElementById('register-form').style.display = 'none';
+        }
+
+        // نمایش فرم ثبت‌نام
+        function showRegisterForm() {
+            document.getElementById('register-form').style.display = 'block';
+            document.getElementById('login-form').style.display = 'none';
+        }
+
+        // ورود به سایت
+        function login() {
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+
+            if (username && password) {
+                localStorage.setItem('username', username);
+                localStorage.setItem('password', password);
+                alert("ورود با موفقیت انجام شد.");
+                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('account-info').style.display = 'block';
+                document.getElementById('account-username').textContent = username;
+            } else {
+                document.getElementById('login-error').textContent = "لطفاً تمامی فیلدها را پر کنید.";
+            }
+        }
+
+        // ثبت‌نام
+        function register() {
+            const username = document.getElementById('register-username').value;
+            const password = document.getElementById('register-password').value;
+
+            if (username && password) {
+                alert("ثبت‌نام با موفقیت انجام شد.");
+                document.getElementById('register-form').style.display = 'none';
+                document.getElementById('login-form').style.display = 'block';
+            } else {
+                document.getElementById('register-error').textContent = "لطفاً تمامی فیلدها را پر کنید.";
+            }
+        }
+
+        // پنهان کردن و نمایش پست‌ها
+        function showPost(postId) {
+            document.getElementById(postId).style.display = 'block';
+        }
+
+        function hidePost(postId) {
+            document.getElementById(postId).style.display = 'none';
+        }
+
+        // تغییر تنظیمات حساب کاربری
+        function changeSettings() {
+            const username = document.getElementById('change-username').value;
+            const password = document.getElementById('change-password').value;
+
+            if (username && password) {
+                alert("تنظیمات با موفقیت تغییر کرد.");
+                document.getElementById('account-username').textContent = username;
+            }
+        }
+
+        // تغییر اطلاعات حساب کاربری
+        function toggleAccountInfo() {
+            const accountInfo = document.getElementById('account-info');
+            accountInfo.style.display = accountInfo.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // خروج از حساب کاربری
+        function logout() {
+            localStorage.removeItem('username');
+            localStorage.removeItem('password');
+            document.getElementById('account-info').style.display = 'none';
+            document.getElementById('login-form').style.display = 'block';
+            alert("خروج با موفقیت انجام شد.");
+        }
+
+        // ارسال نظر
+        function submitComment() {
+            const username = document.getElementById('comment-username').value;
+            const comment = document.getElementById('comment-text').value;
+            if (username && comment) {
+                const commentList = document.getElementById('comments-list');
+                const newComment = document.createElement('p');
+                newComment.textContent = `${username}: ${comment}`;
+                commentList.appendChild(newComment);
+                document.getElementById('comment-username').value = '';
+                document.getElementById('comment-text').value = '';
+            }
+        }
+    </script>
+</body>
+</html>
